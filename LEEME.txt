@@ -1,0 +1,40 @@
+FIX STEAM ICONS - Script unico
+==============================
+
+Contenido:
+  - EJECUTAR.bat          -> doble clic para lanzarlo.
+  - fix-steam-icons.ps1   -> el script (puedes editarlo para cambiar librerias).
+  - LEEME.txt             -> este archivo.
+
+Flujo (no pregunta nada salvo empates de .exe):
+  1. Lee los appmanifest_*.acf de tus librerias de Steam y extrae
+     appid, nombre e installdir de cada juego instalado.
+  2. Escanea accesos directos (.lnk y .url) de tu Escritorio.
+  3. Por cada shortcut tipo Steam:
+       - saca el appid del argumento o de la URL
+       - lo cruza con los juegos instalados
+       - localiza el .exe principal con heuristica
+       - le asigna ese .exe como fuente del icono
+     Si para un juego hay varios .exe candidatos empatados te muestra
+     los 5 mejores y eliges numero (vacio = 1, 's' = saltar).
+  4. Fuerza el refresco visual: SHChangeNotify + touch de los .lnk
+     + rename-trick para romper cache por ruta + limpieza de IconCache
+     y thumbcache + reinicio del Explorador.
+  5. Imprime un resumen con el estado de cada shortcut.
+
+Librerias configuradas:
+  F:\SteamLibrary
+  E:\SteamLibrary
+  D:\SteamLibrary
+
+Si hace falta anadir/cambiar una: abre fix-steam-icons.ps1 con Notepad
+y edita la variable $SteamLibraries de las primeras lineas.
+
+Estados del resumen:
+  OK                      -> icono asignado correctamente
+  sin appid (se ignora)   -> no es un shortcut de juego (p.ej. el de Steam)
+  appid N no instalado    -> no hay manifest para ese appid en tus librerias
+  carpeta no existe       -> el manifest apunta a una carpeta borrada
+  sin .exe                -> no se encontraron ejecutables en la carpeta
+  saltado                 -> lo saltaste tu en el prompt de empate
+  error: ...              -> fallo al guardar, normalmente permisos
