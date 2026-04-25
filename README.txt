@@ -1,3 +1,11 @@
+Script for fixing steam games desktop icons showing blank.
+
+You need to manually edit fix-steam-icons.ps1 and set your steam libraries location (the directories where your games are installed)
+
+RUN.bat just skips script execution policy restriction in case you have it. You can just run the .ps1 file through powershell as admin.
+
+If game have more than 1 exe file with an icon script propts you to choose one.
+
 FIX STEAM ICONS - Single script
 ===============================
 
